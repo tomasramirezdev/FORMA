@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import { Outfit, DM_Sans } from 'next/font/google'
+import { UIProvider } from '@/context/UIContext'
+import FloatingWhatsApp from '@/components/FloatingWhatsApp/FloatingWhatsApp'
 import './globals.css'
 
 const outfit = Outfit({
@@ -41,7 +43,12 @@ export default function RootLayout({
             lang="es"
             className={`${outfit.variable} ${dmSans.variable}`}
         >
-            <body>{children}</body>
+            <body>
+                <UIProvider>
+                    {children}
+                    <FloatingWhatsApp />
+                </UIProvider>
+            </body>
         </html>
     )
 }

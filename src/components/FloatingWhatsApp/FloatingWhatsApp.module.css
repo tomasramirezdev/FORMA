@@ -1,0 +1,41 @@
+.button {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    width: 64px;
+    height: 64px;
+    background-color: #25d366;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 999;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.button:hover {
+    transform: scale(1.1);
+    background-color: #128c7e;
+}
+
+.button svg {
+    width: 32px;
+    height: 32px;
+}
+
+@media (max-width: 768px) {
+    .button {
+        bottom: 24px;
+        right: 24px;
+        width: 56px;
+        height: 56px;
+    }
+    
+    .button svg {
+        width: 28px;
+        height: 28px;
+    }
+}

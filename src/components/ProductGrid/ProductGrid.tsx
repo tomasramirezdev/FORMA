@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { Product } from '@/types/product'
 import CategoryFilter from '@/components/CategoryFilter/CategoryFilter'
 import ProductCard from '@/components/ProductCard/ProductCard'
 import ProductModal from '@/components/ProductModal/ProductModal'
+import { useUI } from '@/context/UIContext'
 import styles from './ProductGrid.module.css'
 
 const CATEGORIES = ['sillones', 'mesas', 'sillas', 'otros']
@@ -16,6 +17,12 @@ interface ProductGridProps {
 export default function ProductGrid({ products: allProducts }: ProductGridProps) {
     const [activeCategory, setActiveCategory] = useState<string>('todos')
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+    const { setIsProductOpen } = useUI()
+
+    // Sync modal state with UIContext
+    useEffect(() => {
+        setIsProductOpen(!!selectedProduct)
+    }, [selectedProduct, setIsProductOpen])
 
     const filtered =
         activeCategory === 'todos'
