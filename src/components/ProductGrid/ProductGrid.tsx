@@ -8,8 +8,6 @@ import ProductModal from '@/components/ProductModal/ProductModal'
 import { useUI } from '@/context/UIContext'
 import styles from './ProductGrid.module.css'
 
-const CATEGORIES = ['sillones', 'mesas', 'sillas', 'otros']
-
 interface ProductGridProps {
     products: Product[]
     error?: boolean
@@ -17,6 +15,8 @@ interface ProductGridProps {
 
 export default function ProductGrid({ products: allProducts, error }: ProductGridProps) {
     const [activeCategory, setActiveCategory] = useState<string>('todos')
+
+    const categories = [...new Set(allProducts.map((p) => p.category))]
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
     const { setIsProductOpen } = useUI()
 
@@ -43,7 +43,7 @@ export default function ProductGrid({ products: allProducts, error }: ProductGri
 
                 {/* Category filter */}
                 <CategoryFilter
-                    categories={CATEGORIES}
+                    categories={categories}
                     active={activeCategory}
                     onChange={setActiveCategory}
                 />

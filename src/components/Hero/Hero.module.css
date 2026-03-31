@@ -6,8 +6,7 @@
             var(--color-beige-light) 100%);
     display: flex;
     align-items: center;
-    padding-top: 72px;
-    /* navbar height */
+    padding-top: 0;
 }
 
 .container {
