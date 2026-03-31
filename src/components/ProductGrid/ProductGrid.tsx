@@ -12,9 +12,10 @@ const CATEGORIES = ['sillones', 'mesas', 'sillas', 'otros']
 
 interface ProductGridProps {
     products: Product[]
+    error?: boolean
 }
 
-export default function ProductGrid({ products: allProducts }: ProductGridProps) {
+export default function ProductGrid({ products: allProducts, error }: ProductGridProps) {
     const [activeCategory, setActiveCategory] = useState<string>('todos')
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
     const { setIsProductOpen } = useUI()
@@ -47,18 +48,28 @@ export default function ProductGrid({ products: allProducts }: ProductGridProps)
                     onChange={setActiveCategory}
                 />
 
-                {/* Grid */}
-                <div className={styles.grid}>
-                    {filtered.map((product) => (
-                        <ProductCard
-                            key={product.id}
-                            product={product}
-                            onOpenModal={setSelectedProduct}
-                        />
-                    ))}
-                </div>
+                {/* Error state */}
+                {error && allProducts.length === 0 && (
+                    <div className={styles.empty}>
+                        <p>No se pudieron cargar los productos en este momento.</p>
+                        <p>Por favor revisá tu conexión o intentá más tarde.</p>
+                    </div>
+                )}
 
-                {filtered.length === 0 && (
+                {/* Grid */}
+                {!error && (
+                    <div className={styles.grid}>
+                        {filtered.map((product) => (
+                            <ProductCard
+                                key={product.id}
+                                product={product}
+                                onOpenModal={setSelectedProduct}
+                            />
+                        ))}
+                    </div>
+                )}
+
+                {!error && filtered.length === 0 && (
                     <div className={styles.empty}>
                         <p>No hay productos en esta categoría.</p>
                     </div>

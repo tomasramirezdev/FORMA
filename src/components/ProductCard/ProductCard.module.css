@@ -86,6 +86,14 @@
     line-height: var(--leading-snug);
 }
 
+.shortDescription {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: var(--leading-normal);
+}
+
 /* Price row */
 .priceRow {
     display: flex;

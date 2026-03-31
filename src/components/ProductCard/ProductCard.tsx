@@ -55,6 +55,9 @@ export default function ProductCard({ product, onOpenModal }: ProductCardProps) 
                     Colección {CATEGORY_LABELS[product.category] ?? product.category}
                 </p>
                 <h3 className={styles.name}>{product.name}</h3>
+                {product.shortDescription && (
+                    <p className={styles.shortDescription}>{product.shortDescription}</p>
+                )}
 
                 {/* Price row */}
                 <div className={styles.priceRow}>

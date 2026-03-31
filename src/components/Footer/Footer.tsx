@@ -1,9 +1,21 @@
 import { WHATSAPP_NUMBER } from '@/lib/products'
+import type { SiteConfig } from '@/types/product'
 import styles from './Footer.module.css'
 
-export default function Footer() {
+interface FooterProps {
+    config?: SiteConfig
+}
+
+export default function Footer({ config }: FooterProps) {
     const currentYear = new Date().getFullYear()
-    const waUrl = `https://wa.me/${WHATSAPP_NUMBER}`
+    const telefono = config?.telefono || WHATSAPP_NUMBER
+    const waUrl = `https://wa.me/${telefono.replace(/[\s+\-()]/g, '')}`
+    const rawInstagram = config?.instagram || ''
+    const instagramUrl = rawInstagram
+        ? rawInstagram.startsWith('http') ? rawInstagram : `https://${rawInstagram}`
+        : 'https://instagram.com'
+    const direccion = config?.direccion || 'Buenos Aires, Argentina'
+    const email = config?.email || ''
 
     return (
         <footer className={styles.footer} id="contacto">
@@ -13,25 +25,19 @@ export default function Footer() {
                     {/* Column 1 — Brand */}
                     <div className={styles.column}>
                         <p className={styles.logo}>
-                            FOR<span className={styles.logoAccent}>M</span>A
+                            {config?.nombre || 'FORMA'}
                         </p>
                         <p className={styles.tagline}>
                             Diseño que transforma tu hogar.
                         </p>
-                        <p className={styles.muted}>
-                            Buenos Aires, Argentina
-                        </p>
                     </div>
 
                     {/* Column 2 — Contact */}
-                    <div className={styles.column} id="nosotros">
+                    <div className={styles.column}>
                         <h3 className={styles.columnTitle}>Contacto</h3>
                         <ul className={styles.contactList}>
-                            <li className={styles.contactItem}>
-                                Av. del Libertador 1234, Buenos Aires
-                            </li>
-                            <li className={styles.contactItem}>+54 9 11 1234-5678</li>
-                            <li className={styles.contactItem}>hola@forma.ar</li>
+                            <li className={styles.contactItem}>{direccion}</li>
+                            {email && <li className={styles.contactItem}>{email}</li>}
                         </ul>
                     </div>
 
@@ -41,7 +47,7 @@ export default function Footer() {
                         <ul className={styles.socialList}>
                             <li>
                                 <a
-                                    href="https://instagram.com"
+                                    href={instagramUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className={styles.socialLink}
@@ -84,7 +90,7 @@ export default function Footer() {
                 {/* Bottom bar */}
                 <div className={styles.bottomBar}>
                     <p className={styles.copyright}>
-                        © {currentYear} FORMA Mueblería. Todos los derechos reservados.
+                        © {currentYear} {config?.nombre || 'FORMA'}. Todos los derechos reservados.
                     </p>
                 </div>
             </div>

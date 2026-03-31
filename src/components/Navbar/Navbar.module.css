@@ -39,6 +39,13 @@
     color: var(--color-accent);
 }
 
+.logoImage {
+    height: 46px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
 /* Desktop nav */
 .navLinks {
     display: flex;

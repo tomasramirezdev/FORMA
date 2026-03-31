@@ -1,72 +1,39 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import Navbar from '@/components/Navbar/Navbar'
 import Footer from '@/components/Footer/Footer'
+import { getConfigFromSheet } from '@/lib/google-sheets'
 import styles from './nosotros.module.css'
 
-export const metadata: Metadata = {
-    title: 'Nosotros — FORMA Mueblería',
-    description:
-        'Más de 30 años diseñando y fabricando muebles de calidad artesanal en Buenos Aires. Conocé la historia de FORMA.',
+export const dynamic = 'force-dynamic'
+
+export async function generateMetadata(): Promise<Metadata> {
+    const config = await getConfigFromSheet()
+    const nombre = config.nombre || 'FORMA'
+    return {
+        title: `Nosotros — ${nombre}`,
+        description: config.nosotros_descripcion || `Conocé la historia de ${nombre}.`,
+    }
 }
 
-export default function NosotrosPage() {
+export default async function NosotrosPage() {
+    const config = await getConfigFromSheet()
+    const nombre = config.nombre || 'FORMA'
+    const accentColor = config.color || '#B8956A'
+    const titulo = config.nosotros_titulo || 'Nuestra historia'
+    const descripcion = config.nosotros_descripcion || ''
+
     return (
-        <>
-            <Navbar />
+        <div style={{ '--color-accent': accentColor } as React.CSSProperties}>
+            <Navbar nombre={nombre} logo={config.logo} />
             <main className={styles.main}>
 
                 {/* Hero section */}
                 <section className={styles.hero}>
                     <div className={styles.heroInner}>
-                        <p className={styles.label}>Nuestra historia</p>
+                        <p className={styles.label}>{titulo}</p>
                         <h1 className={styles.headline}>
-                            Tres décadas creando espacios que inspiran
+                            {descripcion || `Diseño, calidad y atención personalizada`}
                         </h1>
-                    </div>
-                </section>
-
-                {/* Story section */}
-                <section className={styles.story}>
-                    <div className={styles.storyGrid}>
-
-                        {/* Image wrapper */}
-                        <div className={styles.imageWrapper}>
-                            <Image
-                                src="/images/about/workshop.jpg"
-                                alt="Nuestro taller en Buenos Aires — ebanistas trabajando"
-                                width={600}
-                                height={450}
-                                className={styles.image}
-                            />
-                        </div>
-
-                        {/* Text */}
-                        <div className={styles.storyText}>
-                            <p className={styles.labelSmall}>Quiénes somos</p>
-                            <h2 className={styles.storyTitle}>
-                                Artesanía, diseño y pasión por el detalle
-                            </h2>
-                            <p className={styles.paragraph}>
-                                FORMA nació en 1993 en el corazón de Buenos Aires, cuando un
-                                grupo de ebanistas y diseñadores industriales decidió unir su
-                                experiencia para crear una propuesta distinta: muebles que
-                                combinan la solidez de la fabricación artesanal con la
-                                sensibilidad del diseño contemporáneo.
-                            </p>
-                            <p className={styles.paragraph}>
-                                A lo largo de más de treinta años, hemos mantenido el mismo
-                                compromiso que nos define desde el primer día: seleccionar los
-                                mejores materiales, respetar los tiempos del oficio y entregar
-                                piezas que acompañen a nuestros clientes durante generaciones.
-                            </p>
-                            <p className={styles.paragraph}>
-                                Cada mueble que fabricamos pasa por manos expertas antes de
-                                llegar al tuyo. Nuestro taller en Villa Devoto es donde el
-                                roble, el fresno y el acero toman forma bajo la mirada de
-                                maestros con décadas de oficio acumulado.
-                            </p>
-                        </div>
                     </div>
                 </section>
 
@@ -80,22 +47,22 @@ export default function NosotrosPage() {
                                 {
                                     number: '01',
                                     title: 'Materiales nobles',
-                                    desc: 'Trabajamos con maderas macizas, cueros naturales y metales de primera calidad. Sin atajos, sin materiales sintéticos donde no corresponde.',
+                                    desc: 'Trabajamos con los mejores materiales disponibles. Sin atajos, sin compromisos en la calidad.',
                                 },
                                 {
                                     number: '02',
                                     title: 'Fabricación local',
-                                    desc: 'Todo se produce en nuestro taller de Buenos Aires. Apoyamos el trabajo argentino y mantenemos el control total de cada etapa del proceso.',
+                                    desc: 'Todo se produce localmente. Apoyamos el trabajo de nuestra comunidad y mantenemos control total del proceso.',
                                 },
                                 {
                                     number: '03',
                                     title: 'Diseño atemporal',
-                                    desc: 'No seguimos tendencias efímeras. Creamos piezas de diseño sobrio y equilibrado, pensadas para durar décadas sin perder vigencia.',
+                                    desc: 'Creamos piezas de diseño sobrio y equilibrado, pensadas para durar décadas sin perder vigencia.',
                                 },
                                 {
                                     number: '04',
                                     title: 'Atención personalizada',
-                                    desc: 'Cada cliente es único. Trabajamos con vos desde la elección del material hasta la entrega, sin intermediarios ni procesos automatizados.',
+                                    desc: 'Cada cliente es único. Te acompañamos en todo el proceso, sin intermediarios.',
                                 },
                             ].map((p) => (
                                 <div key={p.number} className={styles.pillar}>
@@ -108,33 +75,8 @@ export default function NosotrosPage() {
                     </div>
                 </section>
 
-                {/* Second image placeholder */}
-                <section className={styles.imageSection}>
-                    <div className={styles.imageSectionInner}>
-                        <div className={styles.imageLarge} aria-hidden="true">
-                            <p className={styles.imagePlaceholderText}>
-                                [ Foto del equipo / showroom ]
-                            </p>
-                        </div>
-                        <div className={styles.imageStat}>
-                            <div className={styles.stat}>
-                                <span className={styles.statNumber}>+30</span>
-                                <span className={styles.statLabel}>Años de experiencia</span>
-                            </div>
-                            <div className={styles.stat}>
-                                <span className={styles.statNumber}>+2000</span>
-                                <span className={styles.statLabel}>Piezas fabricadas</span>
-                            </div>
-                            <div className={styles.stat}>
-                                <span className={styles.statNumber}>100%</span>
-                                <span className={styles.statLabel}>Producción local</span>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
             </main>
-            <Footer />
-        </>
+            <Footer config={config} />
+        </div>
     )
 }
